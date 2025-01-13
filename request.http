@@ -9,9 +9,9 @@ POST http://localhost:3001/api/aluno/cadastrar
 Content-Type: application/json
 
 {
-  "nome": "João Silva",
+  "nome": "João 1",
   "notas": 5,
-  "email": "joao.silva3@email.com",
+  "email": "joao.silva1@email.com",
   "senha":"12345678"
 }
 
