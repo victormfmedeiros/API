@@ -2,7 +2,7 @@ const express = require('express')
 const route_aluno = express.Router();
 
 // importando o controller
-const { listar, criar, atualizar, deletar, deletarTodos, listarPorId} = require('../controllers/index')
+const { listar, criar, atualizar, deletar, deletarTodos, listarPorId, login} = require('../controllers/index')
 
 // Listar todos os alunos
 // http://localhost:3001
@@ -27,5 +27,9 @@ route_aluno.delete('/deletar/:id', deletar);
 // Deletar todos os alunos
 // http://localhost:3001/aluno/deletar
 route_aluno.delete('/deletar', deletarTodos);
+
+// Login aluno
+// http://localhost:3001/api/aluno/login
+route_aluno.post('/login', login);
 
 module.exports = route_aluno;
