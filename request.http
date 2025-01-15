@@ -34,3 +34,12 @@ Content-Type: application/json
 ### Cadastrar alunos
 DELETE http://localhost:3001/api/aluno/deletar
 Content-Type: application/json
+
+### Login aluno
+POST http://localhost:3001/api/aluno/login
+Content-Type: application/json
+
+{
+  "email": "joao.silva1@email.com",
+  "senha":"12345678"
+}

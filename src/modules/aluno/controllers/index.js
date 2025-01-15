@@ -8,38 +8,29 @@ dotenv.config()
 const login = async (requisicao, resposta) => {
     try {
       const { email, senha } = requisicao.body;
-      // fulano@email.com 12345678
       if(!email || !senha){
-        return resposta.status(400).json({msg:"É obrigatorio fornecer o email e senha!"});
+        return resposta.status(400).json({msg:"É obrigatorio fornecer o email e senha!", detalhes: error.message});
       }
-      const aluno = await Aluno.findOne({where: email})
+      const aluno = await Aluno.findOne({where: { email }})
       if(!aluno){
-        return resposta.status(401).json({msg:"Usuario não encontrado!"});
+        return resposta.status(401).json({msg:"Usuario não encontrado!", detalhes: error.message});
       }
       const senhaValida = await bcrypt.compare(senha, aluno.senha)
       if(!senhaValida){
-        return resposta.status(401).json({msg:"Senha invalida!"});
+        return resposta.status(401).json({msg:"Senha invalida!", detalhes: error.message});
       }
       const token = jwt.sign({ 
         id: aluno.id, 
         email: aluno.email 
       }, process.env.SECRET_KEY, 
       {expiresIn:"24h"} )
-      resposta.status(200).json({msg:"Usuario autenticado!", token});
+      return resposta.status(200).json({msg:"Usuario autenticado!", token});
     } catch (error) {
-      
+      resposta.status(500).json({msg:"Erro ao tentar fazer login", detalhes: error.message});
     }
 }
 
-// Listar alunos - read
-const listar = async (requisicao, resposta) => {
-  try {
-    const alunos = await Aluno.findAll();
-    resposta.status(200).json(alunos);
-  } catch (error) {
-    resposta.status(500).json({ error: "Erro ao listar os alunos!", detalhes: error.message });
-  }
-};
+
 // Cadastrar alunos - create
 const criar = async (requisicao, resposta) => {
   try {
@@ -54,11 +45,11 @@ const criar = async (requisicao, resposta) => {
 const atualizar = async (requisicao, resposta) => {
   try {
     // localhost:3000/api/aluno/1
-    const { id } = requisicao.params;
+    const { id } = requisicao.aluno.params;
     const { nome, email, notas, senha } = requisicao.body;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
-      return resposta.status(404).json({ msg: "Usuario não encontrado!" });
+      return resposta.status(404).json({ msg: "Usuario não encontrado!", detalhes: error.message  });
     }
     await aluno.update({ nome, email, notas, senha });
     resposta.status(200).json(aluno);
@@ -70,7 +61,7 @@ const atualizar = async (requisicao, resposta) => {
 const deletar = async (requisicao, resposta) => {
   try {
     // localhost:3000/api/aluno/1
-    const { id } = requisicao.params;
+    const { id } = requisicao.aluno.params;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
       return resposta.status(404).json({ msg: "Usuario não encontrado!" });
@@ -82,18 +73,18 @@ const deletar = async (requisicao, resposta) => {
   }
 };
 
-const deletarTodos = async (requisicao, resposta) => {
-  try {
-    await Aluno.destroy({ where: {} });
-    resposta.status(200).json({ msg: "Todos os alunos foram excluidos!" });
-  } catch (error) {
-    resposta.status(500).json({ error: "Erro ao excluir os alunos!" , detalhes: error.message});
-  }
-};
+// const deletarTodos = async (requisicao, resposta) => {
+//   try {
+//     await Aluno.destroy({ where: {} });
+//     resposta.status(200).json({ msg: "Todos os alunos foram excluidos!" });
+//   } catch (error) {
+//     resposta.status(500).json({ error: "Erro ao excluir os alunos!" , detalhes: error.message});
+//   }
+// };
 
 const listarPorId = async (requisicao, resposta) => {
   try {
-    const { id } = requisicao.params;
+    const { id } = requisicao.aluno.params;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
       return resposta.status(404).json({ msg: "Usuario não encontrado!" });
@@ -104,4 +95,4 @@ const listarPorId = async (requisicao, resposta) => {
   }
 };
 
-module.exports = { listar, criar, atualizar, deletar, deletarTodos, listarPorId };
+module.exports = { criar, atualizar, deletar,  listarPorId, login };
