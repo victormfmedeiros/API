@@ -1,9 +1,6 @@
 ### Rota para listar todos os alunos
-GET http://localhost:3001/api/aluno
-
-### Rota para listar todos os alunos
-GET http://localhost:3001/api/aluno/1
-
+GET http://localhost:3001/api/aluno/perfil
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2FvLnNpbHZhMUBlbWFpbC5jb20iLCJpYXQiOjE3MzcwNjUzMTksImV4cCI6MTczNzE1MTcxOX0.wKnP72dxsgyQtTDNgL_qZKUvFlYyF0BVgrdgefFu8oA
 ### Cadastrar alunos
 POST http://localhost:3001/api/aluno/cadastrar
 Content-Type: application/json
@@ -15,9 +12,10 @@ Content-Type: application/json
   "senha":"12345678"
 }
 
-### Cadastrar alunos
-PUT http://localhost:3001/api/aluno/editar/1
+### Atualizar alunos
+PUT http://localhost:3001/api/aluno/perfil
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2FvLnNpbHZhMUBlbWFpbC5jb20iLCJpYXQiOjE3MzcwNjUzMTksImV4cCI6MTczNzE1MTcxOX0.wKnP72dxsgyQtTDNgL_qZKUvFlYyF0BVgrdgefFu8oA
 
 {
   "nome": "João Editado",
@@ -26,13 +24,14 @@ Content-Type: application/json
   "senha":"12345678"
 }
 
-### Cadastrar alunos
-DELETE http://localhost:3001/api/aluno/deletar/1
+### Deletar alunos
+DELETE http://localhost:3001/api/aluno/perfil
 Content-Type: application/json
+Authorization: Bearer 
 
 
 ### Cadastrar alunos
-DELETE http://localhost:3001/api/aluno/deletar
+DELETE http://localhost:3001/api/aluno/perfil
 Content-Type: application/json
 
 ### Login aluno

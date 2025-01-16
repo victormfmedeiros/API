@@ -9,15 +9,15 @@ const login = async (requisicao, resposta) => {
     try {
       const { email, senha } = requisicao.body;
       if(!email || !senha){
-        return resposta.status(400).json({msg:"É obrigatorio fornecer o email e senha!", detalhes: error.message});
+        return resposta.status(400).json({msg:"É obrigatorio fornecer o email e senha!", detalhes: "Token nao fornecido"});
       }
       const aluno = await Aluno.findOne({where: { email }})
       if(!aluno){
-        return resposta.status(401).json({msg:"Usuario não encontrado!", detalhes: error.message});
+        return resposta.status(401).json({msg:"Usuario não encontrado!", detalhes: "Token invalido"});
       }
       const senhaValida = await bcrypt.compare(senha, aluno.senha)
       if(!senhaValida){
-        return resposta.status(401).json({msg:"Senha invalida!", detalhes: error.message});
+        return resposta.status(401).json({msg:"Senha invalida!", detalhes: "Token invalido"});
       }
       const token = jwt.sign({ 
         id: aluno.id, 
@@ -42,26 +42,26 @@ const criar = async (requisicao, resposta) => {
   }
 };
 
-const atualizar = async (requisicao, resposta) => {
+const atualizarPerfil = async (requisicao, resposta) => {
   try {
     // localhost:3000/api/aluno/1
-    const { id } = requisicao.aluno.params;
-    const { nome, email, notas, senha } = requisicao.body;
+    const  id  = requisicao.aluno.id;
+    const { nome, notas, email,  senha } = requisicao.body;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
-      return resposta.status(404).json({ msg: "Usuario não encontrado!", detalhes: error.message  });
+      return resposta.status(404).json({ msg: "Usuario não encontrado!" });
     }
-    await aluno.update({ nome, email, notas, senha });
+    await aluno.update({ nome, notas, email,  senha });
     resposta.status(200).json(aluno);
   } catch (error) {
     resposta.status(500).json({ error: "Erro ao atualizar aluno!", detalhes: error.message });
   }
 };
 
-const deletar = async (requisicao, resposta) => {
+const deletarPerfil = async (requisicao, resposta) => {
   try {
     // localhost:3000/api/aluno/1
-    const { id } = requisicao.aluno.params;
+    const  id  = requisicao.aluno.id;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
       return resposta.status(404).json({ msg: "Usuario não encontrado!" });
@@ -82,9 +82,9 @@ const deletar = async (requisicao, resposta) => {
 //   }
 // };
 
-const listarPorId = async (requisicao, resposta) => {
+const listarPerfil = async (requisicao, resposta) => {
   try {
-    const { id } = requisicao.aluno.params;
+    const id  = requisicao.aluno.id;
     const aluno = await Aluno.findByPk(id);
     if (!aluno) {
       return resposta.status(404).json({ msg: "Usuario não encontrado!" });
@@ -95,4 +95,4 @@ const listarPorId = async (requisicao, resposta) => {
   }
 };
 
-module.exports = { criar, atualizar, deletar,  listarPorId, login };
+module.exports = { criar, atualizarPerfil, deletarPerfil,  listarPerfil, login };

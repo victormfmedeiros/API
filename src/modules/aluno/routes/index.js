@@ -1,25 +1,26 @@
 const express = require('express')
+const autenticar = require("../../../middleware/autenticar")
 const route_aluno = express.Router();
 
 // importando o controller
-const {  criar, atualizar, deletar, listarPorId, login} = require('../controllers/index')
+const {  criar, atualizarPerfil, deletarPerfil, listarPerfil, login} = require('../controllers/index')
 
 
 // Listar os alunos por id
-// http://localhost:3001/aluno/1
-route_aluno.get('/perfil',login, listarPorId);
+// http://localhost:3001/api/aluno/perfil
+route_aluno.get('/perfil',autenticar, listarPerfil);
 
 // Atualizar o aluno por id
-// http://localhost:3001/aluno/editar/1
-route_aluno.put('/perfil/:id',login, atualizar);
+// http://localhost:3001/api/aluno/perfil
+route_aluno.put('/perfil',autenticar, atualizarPerfil);
 
 // Cadastrar aluno
 // http://localhost:3001/aluno/cadastrar
 route_aluno.post('/cadastrar', criar);
 
 // Deletar aluno especifico
-// http://localhost:3001/aluno/deletar/1
-route_aluno.delete('/deletar/:id',login, deletar);
+// http://localhost:3001/api/aluno/perfil
+route_aluno.delete('/perfil',autenticar, deletarPerfil);
 
 // Login aluno
 // http://localhost:3001/api/aluno/login
